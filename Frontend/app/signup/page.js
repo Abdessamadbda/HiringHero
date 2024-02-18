@@ -24,7 +24,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        hiringHero
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -41,7 +41,7 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const response = await fetch("/signup", {
+      const response = await fetch("http://localhost:3001/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,8 +50,9 @@ export default function SignUp() {
           firstName: data.get("firstName"),
           lastName: data.get("lastName"),
           email: data.get("email"),
+          company: data.get("company"),
+
           password: data.get("password"),
-          allowExtraEmails: data.get("allowExtraEmails"), // If checkbox checked
         }),
       });
       if (response.ok) {

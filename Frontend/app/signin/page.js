@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useRouter } from "next/navigation";
 
 function Copyright(props) {
   return (
@@ -24,7 +25,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        HiringHero
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -37,11 +38,13 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
+  const router = useRouter();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const response = await fetch("/signin", {
+      const response = await fetch("http://localhost:3001/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,14 +57,12 @@ export default function SignInSide() {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Signin successful:", responseData);
-        // Handle signin success, such as redirecting to a dashboard page
+        router.push(responseData.redirectUrl);
       } else {
         console.error("Signin failed:", response.statusText);
-        // Handle signin failure, such as displaying an error message to the user
       }
     } catch (error) {
       console.error("Error signing in:", error);
-      // Handle error, such as displaying an error message to the user
     }
   };
 

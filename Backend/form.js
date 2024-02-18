@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const qs = require('qs');
@@ -6,7 +7,6 @@ const session = require('express-session');
 const crypto = require('crypto');
 const cors = require('cors');
 const JobOffer = require('./models/jobOffer');
-require('dotenv').config();
 
 const app = express();
 
