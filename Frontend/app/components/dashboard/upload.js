@@ -1,6 +1,7 @@
 "use client";
 import { Dropzone, FileMosaic, FullScreen, PdfPreview } from "@files-ui/react";
 import * as React from "react";
+import { useSelector } from "react-redux";
 
 const BASE_URL = "http://localhost:3001";
 

@@ -37,32 +37,74 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
+export default function Signin() {
   const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get("email");
+    const password = data.get("password");
+
     try {
-      const response = await fetch("http://localhost:3001/auth/signin", {
+      const response = await fetch("http://localhost:8080/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: data.get("email"),
-          password: data.get("password"),
-        }),
+        body: JSON.stringify({ email, password }),
       });
+
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Signin successful:", responseData);
-        router.push(responseData.redirectUrl);
+        const { user, token } = responseData;
+        localStorage.setItem("token", token);
+
+        // Verify token before redirecting to dashboard
+        await sendAuthenticatedRequest("http://localhost:8080/verify", token);
+
+        // Store token in localStorage
+
+        // Redirect user to dashboard
+        router.push("/dashboard");
       } else {
         console.error("Signin failed:", response.statusText);
+        router.push("/signin");
+        // Handle error, e.g., display an error message to the user
       }
     } catch (error) {
       console.error("Error signing in:", error);
+      // Handle error, e.g., display an error message to the user
+    }
+  };
+
+  // Function to verify the token
+  const sendAuthenticatedRequest = async (url) => {
+    try {
+      // Retrieve token from localStorage
+      const token = localStorage.getItem("token");
+      console.log(token);
+
+      if (!token) {
+        throw new Error("Token not found in localStorage");
+      }
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error sending authenticated request:", error);
+      throw error;
     }
   };
 

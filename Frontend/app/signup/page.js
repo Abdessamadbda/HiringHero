@@ -41,7 +41,7 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const response = await fetch("http://localhost:3001/auth/signup", {
+      const response = await fetch("http://localhost:8080/user/save", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

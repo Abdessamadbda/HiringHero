@@ -33,22 +33,27 @@ export default function Form() {
     e.preventDefault();
 
     try {
-      // Send form data to backend for processing
-      const response = await fetch("http://localhost:3001/submit", {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
+      const response = await fetch("http://localhost:8080/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Use the formData state directly
       });
 
       if (response.ok) {
-        // Optionally, display a success message to the user
         dispatch({ type: "SET_KEYWORDS", payload: keywords });
         alert("Job offer submitted successfully!");
 
-        // Clear form data after successful submission
         setFormData({
+          // Reset the form data
           companyName: "",
           email: "",
           position: "",
@@ -60,14 +65,11 @@ export default function Form() {
           city: "",
         });
 
-        // Reloads the current page
-        window.location.reload();
+        window.location.reload(); // Reload the current page
       } else {
-        // Handle errors if the request fails
         throw new Error("Failed to submit job offer");
       }
     } catch (error) {
-      // Handle error
       console.error("Error submitting job offer:", error);
       alert("An error occurred while submitting the job offer.");
     }
