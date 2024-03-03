@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { UserButton, useUser } from "@clerk/nextjs";
+//import { UserButton, useUser } from "@clerk/nextjs";
 
 const navigation = [
   { name: "Home", href: "#home" },
@@ -11,7 +11,7 @@ const navigation = [
 ];
 const menuItems = ["Home", "Services", "Contact Us"];
 export default function Navbar() {
-  const { user } = useUser();
+  //const { user } = useUser();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -50,7 +50,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            {user ? ( // Check if a user is authenticated
+            {/* {user ? ( // Check if a user is authenticated
               <UserButton className="h-screen" afterSignOutUrl="/" />
             ) : (
               <a
@@ -59,7 +59,7 @@ export default function Navbar() {
               >
                 Log in <span aria-hidden="true">&rarr;</span>
               </a>
-            )}
+            )}*/}
           </div>
         </nav>
         <Dialog

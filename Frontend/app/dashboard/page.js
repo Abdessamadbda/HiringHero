@@ -5,7 +5,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import Form from "../components/dashboard/form";
 import Upload from "../components/dashboard/upload";
-
+import { Provider } from "react-redux";
+import store from "../lib/store";
 function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -43,12 +44,7 @@ function Dashboard() {
   }, []);
 
   // Handle logout
-  const handleLogout = () => {
-    // Clear token from localStorage
-    localStorage.removeItem("token");
-    // Redirect user to sign-in page
-    router.push("/signin");
-  };
+  
 
   // Render loading indicator if loading
   if (loading) {
@@ -62,15 +58,13 @@ function Dashboard() {
 
   // Render components based on token validity
   return (
-    <>
+    <Provider store={store}>
       <div>
         <div>{currentStep === 0 && <Form />}</div>
         <div>{currentStep === 1 && <Upload />}</div>
-        <button onClick={handleLogout} style={{ float: "right" }}>
-          Logout
-        </button>
+       
       </div>
-    </>
+    </Provider>
   );
 }
 

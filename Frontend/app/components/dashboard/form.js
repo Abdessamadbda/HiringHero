@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Form() {
   const [country, setCountry] = useState("");
   const [cities, setCities] = useState([]);
+  const currentUser = useSelector((state) => state.user);
+  const userId = currentUser ? currentUser.id : ""; // Extract userId from currentUser
+
   const [formData, setFormData] = useState({
     companyName: "",
     email: "",
@@ -45,7 +48,7 @@ export default function Form() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData), // Use the formData state directly
+        body: JSON.stringify(formData), // Send formData directly
       });
 
       if (response.ok) {
@@ -110,8 +113,8 @@ export default function Form() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="company-name"
-                  id="company-name"
+                  name="companyName"
+                  id="companyName"
                   autoComplete="given-name"
                   onChange={handleInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -148,8 +151,8 @@ export default function Form() {
               <div className="mt-2">
                 <select
                   id="Software enginner"
-                  name="software"
-                  autoComplete="software-name"
+                  name="position"
+                  autoComplete="position"
                   onChange={handleInputChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
@@ -170,7 +173,7 @@ export default function Form() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="last-name"
+                  name="experience"
                   id="experience"
                   autoComplete="family-name"
                   onChange={handleInputChange}

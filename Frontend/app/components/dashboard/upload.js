@@ -3,7 +3,7 @@ import { Dropzone, FileMosaic, FullScreen, PdfPreview } from "@files-ui/react";
 import * as React from "react";
 import { useSelector } from "react-redux";
 
-const BASE_URL = "http://localhost:3001";
+const BASE_URL = "http://localhost:8080";
 
 export default function Upload() {
   const [extFiles, setExtFiles] = React.useState([]);
@@ -21,7 +21,7 @@ export default function Upload() {
   const handleSee = (pdf) => {
     setPdf(pdf);
   };
-  const keywords = useSelector((state) => state.step.keywords);
+  const keywords = "software";
   console.log("keywords:", keywords);
 
   const handleSubmit = async () => {
@@ -31,7 +31,7 @@ export default function Upload() {
 
       extFiles.forEach((file, index) => {
         if (file.file instanceof File) {
-          formData.append(`cvFiles${index + 1}`, file.file); // Append with unique keys
+          formData.append(`extFiles${index + 1}`, file.file); // Append with unique keys
         }
       });
 
