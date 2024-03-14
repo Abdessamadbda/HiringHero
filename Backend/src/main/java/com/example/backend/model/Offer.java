@@ -1,12 +1,17 @@
 package com.example.backend.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Document(collection = "Offer")
 public class Offer {
     @Id
     private String id;
+    private String userId;
+
     private String companyName;
     private String email;
     private String position;
@@ -14,9 +19,35 @@ public class Offer {
     private String education;
     private String description;
     private String address;
+    private String keywords;
+
+    public Offer() {
+    }
 
     // Constructors, getters, setters
+    public Offer(String id, String userId, String companyName, String email, String position, String experience, String education, String description, String address, String keywords) {
+        this.id = id;
+        this.userId = userId;
+        this.companyName = companyName;
+        this.email = email;
+        this.position = position;
+        this.experience = experience;
+        this.education = education;
+        this.description = description;
+        this.address = address;
+    }
+    public Offer(String userId, String companyName, String email, String position, String experience, String education, String description, String address, String keywords) {
+        this.companyName = companyName;
+        this.email = email;
+        this.position = position;
+        this.experience = experience;
+        this.education = education;
+        this.description = description;
+        this.address = address;
+        this.userId = userId;
+        this.keywords = keywords;
 
+    }
     public Offer( String companyName, String email, String position, String experience, String education, String description, String address) {
         this.companyName = companyName;
         this.email = email;
@@ -34,7 +65,13 @@ public class Offer {
     public void setId(String id) {
         this.id = id;
     }
+    public String getUserId() {
+        return userId;
+    }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     public String getCompanyName() {
         return companyName;
     }
@@ -90,11 +127,19 @@ public class Offer {
     public void setAddress(String address) {
         this.address = address;
     }
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
 
     @Override
     public String toString() {
         return "JobOffer{" +
                 "id='" + id + '\'' +
+                "userId='" + userId + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", email='" + email + '\'' +
                 ", position='" + position + '\'' +
@@ -102,6 +147,7 @@ public class Offer {
                 ", education='" + education + '\'' +
                 ", description='" + description + '\'' +
                 ", address='" + address + '\'' +
+                ", keywords=" + keywords +
                 '}';
     }
 }

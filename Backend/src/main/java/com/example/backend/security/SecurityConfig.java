@@ -59,8 +59,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/user/save").permitAll()
                 .requestMatchers(HttpMethod.GET, "/verify").permitAll()
                 .requestMatchers(HttpMethod.POST, "/submit").permitAll()
+                .requestMatchers(HttpMethod.POST, "/file").permitAll()
+                .requestMatchers(HttpMethod.POST, "/upload-cvs").permitAll()
+
                 .requestMatchers(HttpMethod.GET, "/auth/linkedin").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/linkedin/callback").permitAll()
+                .requestMatchers(HttpMethod.GET, "/offers/*/keywords").permitAll()
 
 
                 .and()

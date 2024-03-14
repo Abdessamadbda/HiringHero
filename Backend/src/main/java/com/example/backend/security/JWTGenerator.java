@@ -15,21 +15,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTGenerator {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);	
-    public String generateToken(String username, String role) {
+    public String generateToken(String id,String username, String role) {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + com.example.backend.security.SecurityConstants.JWT_EXPIRATION);
 
         String token = Jwts.builder()
                 .setSubject(username)
-                .claim("role", role) 
+				.claim("id", id)
+				//     .claim("role", role)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SECRET_KEY)
                 .compact();
         
         return token;
     }
-	public String getUsernameFromJWT(String token){
+	public static String getEmailFromJWT(String token){
 		Claims claims = Jwts.parserBuilder()
 				.setSigningKey(SECRET_KEY)
 				.build()
@@ -37,7 +38,14 @@ public class JWTGenerator {
 				.getBody();
 		return claims.getSubject();
 	}
-	
+	public static String getIdFromJWT(String token){
+		Claims claims = Jwts.parserBuilder()
+				.setSigningKey(SECRET_KEY)
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+		return (String) claims.get("id");
+	}
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parserBuilder()

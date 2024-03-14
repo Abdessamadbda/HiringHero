@@ -44,7 +44,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new UserLoginResponse(null, null));
         }
 
-        String token = jwtGenerator.generateToken(user.getEmail(), "user");
+        String token = jwtGenerator.generateToken(user.getId(),user.getEmail(), "user");
         UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getLastName(), user.getFirstName(),
                 user.getCompany());
         return ResponseEntity.ok(new UserLoginResponse(userDTO, token));
