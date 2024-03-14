@@ -19,6 +19,7 @@ export default function Form() {
     address: "",
     country: "",
     city: "",
+    keywords: "",
   });
 
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ export default function Form() {
           address: "",
           country: "",
           city: "",
+          keywords: "",
         });
 
         window.location.reload(); // Reload the current page
@@ -290,13 +292,24 @@ export default function Form() {
                 />
               </div>
             </div>
-            <input
-              type="text"
-              value={keywords} // Set the value to the keywords from the Redux store
-              onChange={(e) =>
-                dispatch({ type: "SET_KEYWORDS", payload: e.target.value })
-              } // Dispatch action to update keywords
-            />
+            <div className="col-span-full">
+              <label
+                htmlFor="street-address"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Keywords
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="keywords"
+                  id="keywords"
+                  value={formData.keywords} // Set the value to the keywords from the form data state
+                  onChange={handleInputChange} // Handle input changes and update the form data state
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -2,12 +2,37 @@
 import { Dropzone, FileMosaic, FullScreen, PdfPreview } from "@files-ui/react";
 import * as React from "react";
 import { useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import { storeCVResults } from "../../lib/actions";
 const BASE_URL = "http://localhost:8080";
 
 export default function Upload() {
   const [extFiles, setExtFiles] = React.useState([]);
   const [pdf, setPdf] = React.useState(undefined);
+  const [keywords, setKeywords] = React.useState("");
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    async function fetchKeywords(offerId) {
+      try {
+        const response = await fetch(`${BASE_URL}/offers/${offerId}/keywords`);
+        if (response.ok) {
+          const keywordsData = await response.text(); // Use text() instead of json()
+          console.log("keywordsData:", keywordsData);
+          const keywordsArray = keywordsData.split(" "); // Split the string by spaces
+          const keywordsString = keywordsArray.join(", "); // Join the array elements with ", "
+          setKeywords(keywordsString);
+        } else {
+          console.error("Failed to fetch keywords");
+        }
+      } catch (error) {
+        console.error("Error fetching keywords:", error);
+      }
+    }
+
+    const arbitraryOfferId = "65f1a913a5587124519fefe0";
+    fetchKeywords(arbitraryOfferId);
+  }, []);
 
   const updateFiles = (incomingFiles) => {
     console.log("incoming files", incomingFiles);
@@ -21,28 +46,23 @@ export default function Upload() {
   const handleSee = (pdf) => {
     setPdf(pdf);
   };
-  const keywords = "software";
   console.log("keywords:", keywords);
 
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
-      console.log("extFiles:", extFiles);
 
-      extFiles.forEach((file, index) => {
+      extFiles.forEach((file) => {
         if (file.file instanceof File) {
-          formData.append(`extFiles${index + 1}`, file.file); // Append with unique keys
+          formData.append("cvFiles", file.file);
         }
       });
-
       formData.append("keywords", keywords);
-      console.log(formData);
 
       const response = await fetch(`${BASE_URL}/upload-cvs`, {
         method: "POST",
         body: formData,
       });
-      console.log(formData);
 
       if (!response.ok) {
         throw new Error("Failed to process CVs");
@@ -50,6 +70,7 @@ export default function Upload() {
 
       const data = await response.json();
       console.log("CV processing results:", data);
+      dispatch(storeCVResults(data));
     } catch (error) {
       console.error("Error processing CVs:", error);
     }

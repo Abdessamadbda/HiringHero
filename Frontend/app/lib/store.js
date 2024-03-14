@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 
 const initialState = {
   user: null,
+  cvResults: [],
 };
 const SET_KEYWORDS = "SET_KEYWORDS";
 
@@ -40,6 +41,14 @@ const userReducer = (state = initialState, action) => {
       return state;
   }
 };
+const cvResultsReducer = (state = initialState.cvResults, action) => {
+  switch (action.type) {
+    case "STORE_CV_RESULTS":
+      return action.payload;
+    default:
+      return state;
+  }
+};
 
 // Combine reducers
 const rootReducer = combineReducers({
@@ -47,6 +56,7 @@ const rootReducer = combineReducers({
   step: stepReducer,
   keywords: keywordsReducer,
   user: userReducer,
+  cvResults: cvResultsReducer,
   // Include the step reducer
 });
 

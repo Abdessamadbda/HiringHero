@@ -1,4 +1,5 @@
 export const SET_CURRENT_STEP = "SET_CURRENT_STEP";
+export const STORE_CV_RESULTS = "STORE_CV_RESULTS";
 
 // Action creators
 export const setCurrentStep = (step) => ({
@@ -13,3 +14,7 @@ export const setUser = (user) => {
     payload: user,
   };
 };
+export const storeCVResults = (cvResults) => ({
+  type: STORE_CV_RESULTS,
+  payload: cvResults,
+});

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import Form from "../components/dashboard/form";
 import Upload from "../components/dashboard/upload";
 import { Provider } from "react-redux";
+import Results from "../components/dashboard/results";
 import store from "../lib/store";
 function Dashboard() {
   const router = useRouter();
@@ -44,7 +45,6 @@ function Dashboard() {
   }, []);
 
   // Handle logout
-  
 
   // Render loading indicator if loading
   if (loading) {
@@ -62,7 +62,7 @@ function Dashboard() {
       <div>
         <div>{currentStep === 0 && <Form />}</div>
         <div>{currentStep === 1 && <Upload />}</div>
-       
+        <div>{currentStep === 2 && <Results />}</div>
       </div>
     </Provider>
   );
