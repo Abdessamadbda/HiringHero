@@ -8,6 +8,8 @@ import Upload from "../components/dashboard/upload";
 import { Provider } from "react-redux";
 import Results from "../components/dashboard/results";
 import store from "../lib/store";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -59,10 +61,20 @@ function Dashboard() {
   // Render components based on token validity
   return (
     <Provider store={store}>
-      <div>
+      <div className="shadow-2xl">
         <div>{currentStep === 0 && <Form />}</div>
         <div>{currentStep === 1 && <Upload />}</div>
         <div>{currentStep === 2 && <Results />}</div>
+      </div>
+      <div className="mt-16">
+        <Typography variant="body2" color="text.secondary" align="center">
+          {"Copyright © "}
+          <Link color="inherit" href="http://localhost:3000/">
+            HiringHero
+          </Link>{" "}
+          {new Date().getFullYear()}
+          {"."}
+        </Typography>
       </div>
     </Provider>
   );

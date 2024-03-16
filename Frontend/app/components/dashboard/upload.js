@@ -4,6 +4,8 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { storeCVResults } from "../../lib/actions";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 const BASE_URL = "http://localhost:8080";
 
 export default function Upload() {

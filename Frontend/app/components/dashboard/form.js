@@ -2,6 +2,8 @@
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
 export default function Form() {
   const [country, setCountry] = useState("");
@@ -95,10 +97,10 @@ export default function Form() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="space-y-12">
+      <div className="space-y-12 px-16">
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Make an offer
+          <h2 className="text-lg font-bold leading-9 text-gray-900">
+            Make an Offer
           </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

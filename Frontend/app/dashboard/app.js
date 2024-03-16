@@ -1,7 +1,7 @@
 // pages/_app.js
-import { Provider } from 'react-redux';
-import store from './lib/store';
-import Layout from '../components/Layout'; // Import your layout component
+import { Provider } from "react-redux";
+import store from "./lib/store";
+import Layout from "../components/Layout"; // Import your layout component
 
 function App({ Component, pageProps }) {
   return (
