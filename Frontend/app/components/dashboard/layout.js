@@ -2,9 +2,7 @@
 
 export default function Layout() {
   const handleLogout = () => {
-    // Clear token from localStorage
     localStorage.removeItem("token");
-    // Redirect user to sign-in page
     router.push("/signin");
   };
   return (
@@ -18,15 +16,17 @@ export default function Layout() {
             onClick={handleLogout}
             className="text-xl font-bold text-white"
           >
-            Logout
+            <img
+              src="/logout.png"
+              alt="Logout"
+              style={{
+                width: "26px",
+                height: "26px",
+              }}
+            />
           </button>
         </div>
       </header>
-      <main>
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-          {/* Your content */}
-        </div>
-      </main>
     </>
   );
 }

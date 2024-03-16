@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
   return (
     <Provider store={store}>
       <Layout1 />
-      <Stepper className="bg-white" />
+      <Stepper />
       <div className="flex-grow p-6 md:overflow-y-auto md:p-12 bg-white">
         {children}
       </div>

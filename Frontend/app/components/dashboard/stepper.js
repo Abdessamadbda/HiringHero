@@ -7,7 +7,7 @@ import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { setCurrentStep } from "../../lib/actions"; // Import setCurrentStep action creator
+import { setCurrentStep } from "../../lib/actions";
 
 const steps = [
   "Make an Offer",
@@ -40,7 +40,6 @@ const StepperComponent = () => {
   const handleBack = () => {
     dispatch(setCurrentStep((prevActiveStep) => prevActiveStep - 1));
   };
-  const currentStep = useSelector((state) => state.currentStep);
 
   const handleStep = (step) => () => {
     dispatch(setCurrentStep(step));
@@ -59,8 +58,23 @@ const StepperComponent = () => {
   };
 
   return (
-    <div>
-      <Box sx={{ width: "100%" }} className="py-5 px-4">
+    <div
+      style={{
+        marginTop: "25px",
+        marginLeft: "20px",
+        marginRight: "20px",
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          backgroundColor: "#f0f0f0",
+          borderRadius: "10px",
+          padding: "20px",
+        }}
+      >
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
