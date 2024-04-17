@@ -23,7 +23,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="/">
         hiringHero
       </Link>{" "}
       {new Date().getFullYear()}
@@ -34,7 +34,15 @@ function Copyright(props) {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+const theme = createTheme({
+  palette: {
+    background: {
+      default: "#FFFFFF",
+      // Set default background color to white
+    },
+    // Add other palette colors and theme properties as needed
+  },
+});
 
 export default function SignUp() {
   const handleSubmit = async (event) => {
@@ -70,12 +78,11 @@ export default function SignUp() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -159,13 +166,22 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                color: "#1565C0",
+                // Change the text color
+                "&:hover": {
+                  bgcolor: "#1565C0",
+                  color: "#ffffff", // Change the background color on hover
+                },
+              }}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signin" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

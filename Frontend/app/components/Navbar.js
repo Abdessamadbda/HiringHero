@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Dialog } from "@headlessui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+
 //import { UserButton, useUser } from "@clerk/nextjs";
 
 const navigation = [
@@ -11,8 +13,26 @@ const navigation = [
 ];
 const menuItems = ["Home", "Services", "Contact Us"];
 export default function Navbar() {
-  //const { user } = useUser();
+  const [authenticated, setAuthenticated] = useState(false);
+  const router = useRouter();
 
+  //const { user } = useUser();
+  useEffect(() => {
+    // Check if the user is authenticated on component mount
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Set authenticated state to true if token exists
+      setAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    // Clear token from local storage and set authenticated state to false
+    localStorage.removeItem("token");
+    setAuthenticated(false);
+    // Redirect to the home page or login page
+    router.push("/");
+  };
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -50,16 +70,21 @@ export default function Navbar() {
           </div>
 
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            {/* {user ? ( // Check if a user is authenticated
-              <UserButton className="h-screen" afterSignOutUrl="/" />
+            {authenticated ? (
+              <button
+                onClick={handleLogout}
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Logout <span aria-hidden="true">&rarr;</span>
+              </button>
             ) : (
               <a
-                href="#"
+                href="/signin"
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 Log in <span aria-hidden="true">&rarr;</span>
               </a>
-            )}*/}
+            )}
           </div>
         </nav>
         <Dialog

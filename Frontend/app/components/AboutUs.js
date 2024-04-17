@@ -18,8 +18,9 @@ function AboutUs() {
             Meet our leadership
           </h2>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Libero fames augue nisl porttitor nisi, quis. Id ac elit odio vitae
-            elementum enim vitae ullamcorper suspendisse.
+            At Hiring Hero, our dedicated team brings vast experience and
+            expertise. Fueled by innovation and committed to excellence, our
+            leadership shapes our success.
           </p>
         </div>
         <ul

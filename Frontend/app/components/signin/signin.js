@@ -23,7 +23,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="http://localhost:3000/">
         HiringHero
       </Link>{" "}
       {new Date().getFullYear()}
@@ -166,7 +166,16 @@ export default function Signin() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  color: "#1565C0",
+                  // Change the text color
+                  "&:hover": {
+                    bgcolor: "#1565C0",
+                    color: "#ffffff",
+                  },
+                }}
               >
                 Sign In
               </Button>
@@ -177,14 +186,14 @@ export default function Signin() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signup" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
             </Box>
-            <Copyright />
           </Box>
+          <Copyright />
         </Grid>
       </Grid>
     </ThemeProvider>
