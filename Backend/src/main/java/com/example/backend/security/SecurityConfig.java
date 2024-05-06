@@ -65,7 +65,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/auth/linkedin").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/linkedin/callback").permitAll()
                 .requestMatchers(HttpMethod.GET, "/offers/*/keywords").permitAll()
-
+                .requestMatchers(HttpMethod.POST, "/share-on-linkedin").permitAll()
+                .requestMatchers(HttpMethod.POST, "/exchange-code-for-access-token").permitAll()
 
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import LinkedInAuthButton from "./linkedinShare/linkedInAuthButton";
 
 export default function Form() {
   const [country, setCountry] = useState("");
   const [cities, setCities] = useState([]);
   const currentUser = useSelector((state) => state.user);
-  const userId = currentUser ? currentUser.id : ""; // Extract userId from currentUser
+  const userId = currentUser ? currentUser.id : "";
+  const [shared, setShared] = useState(false); // Extract userId from currentUser
 
   const [formData, setFormData] = useState({
     companyName: "",
@@ -93,6 +95,65 @@ export default function Form() {
     const selectedCountry = e.target.value;
     setCountry(selectedCountry);
     setCities(citiesByCountry[selectedCountry] || []);
+  };
+  const handleLinkedInAuth = async (code) => {
+    try {
+      const response = await fetch("/exchange-code-for-access-token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(code),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        await handleLinkedInShare(data.access_token);
+      } else {
+        throw new Error("Failed to authenticate with LinkedIn");
+      }
+    } catch (error) {
+      console.error("Error authenticating with LinkedIn:", error);
+      alert("An error occurred while authenticating with LinkedIn.");
+    }
+  };
+
+  const handleLinkedInShare = async (accessToken) => {
+    try {
+      const content = {
+        content: {
+          title: formData.position + " at " + formData.companyName,
+          description: formData.description,
+          experience: formData.experience,
+          education: formData.education,
+          address: formData.address,
+          country: formData.country,
+          city: formData.city,
+          // Add more fields as needed
+        },
+        visibility: {
+          code: "connections-only",
+        },
+      };
+
+      const response = await fetch("/share-on-linkedin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(content),
+      });
+
+      if (response.ok) {
+        alert("Shared on LinkedIn successfully!");
+        setShared(true); // Update state to indicate shared
+      } else {
+        throw new Error("Failed to share on LinkedIn");
+      }
+    } catch (error) {
+      console.error("Error sharing on LinkedIn:", error);
+      alert("An error occurred while sharing on LinkedIn.");
+    }
   };
 
   return (
@@ -314,11 +375,13 @@ export default function Form() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6 mr-16 ">
+        <LinkedInAuthButton onLinkedInAuth={handleLinkedInAuth} />
         <button
-          type="button"
+          onAbort={handleLinkedInAuth}
           className="text-sm font-semibold leading-6 text-gray-900 border border-gray-900 rounded-md px-3 py-2 shadow-sm hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+          disabled={shared} // Disable button if already shared
         >
-          Share on Linkedin
+          Share on LinkedIn
         </button>
         <button
           type="submit"

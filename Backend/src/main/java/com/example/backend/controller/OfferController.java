@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.apache.pdfbox.pdmodel.PDDocument;
+
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +24,9 @@ import org.bson.types.ObjectId;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -30,6 +34,14 @@ import java.util.*;
 public class OfferController {
     private final RestTemplate restTemplate;
     private final OfferService offerService;
+    @Value("${linkedin.clientId}")
+    private String clientId;
+
+    @Value("${linkedin.clientSecret}")
+    private String clientSecret;
+
+    @Value("${linkedin.redirectUri}")
+    private String redirectUri;
     @Autowired
     private JWTGenerator jwtGenerator;
     private final OfferRepository offerRepository;
@@ -45,46 +57,38 @@ public class OfferController {
         this.offerRepository = offerRepository;
 
     }
-    @GetMapping("/auth/linkedin")
-    public String authLinkedin(HttpSession session) {
-        String state = offerService.generateRandomString(32);
-        session.setAttribute("state", state);
+    @PostMapping("/exchange-code-for-access-token")
+    public ResponseEntity<String> exchangeCodeForAccessToken(@RequestBody String code) {
+        String tokenUrl = "https://www.linkedin.com/oauth/v2/accessToken";
+        String requestBody = "grant_type=authorization_code" +
+                "&code=" + code +
+                "&redirect_uri=" + redirectUri +
+                "&client_id=" + clientId +
+                "&client_secret=" + clientSecret;
 
-        return "redirect:https://www.linkedin.com/oauth/v2/authorization?"
-                + "response_type=code"
-                + "&client_id=" + System.getenv("CLIENT_ID")
-                + "&redirect_uri=http://localhost:8080/auth/linkedin/callback"
-                + "&state=" + state
-                + "&scope=r_liteprofile%20w_member_social";
-    }
-
-    @GetMapping("/auth/linkedin/callback")
-    public String authLinkedinCallback(HttpSession session, @RequestParam String code, @RequestParam String state) {
-        String sessionState = (String) session.getAttribute("state");
-        if (!state.equals(sessionState)) {
-            return "State mismatch";
-        }
-
+        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        Map<String, String> data = new HashMap<>();
-        data.put("grant_type", "authorization_code");
-        data.put("code", code);
-        data.put("redirect_uri", "http://localhost:8080/auth/linkedin/callback");
-        data.put("client_id", System.getenv("CLIENT_ID"));
-        data.put("client_secret", System.getenv("CLIENT_SECRET"));
-
-        HttpEntity<Map<String, String>> request = new HttpEntity<>(data, headers);
-
-        ResponseEntity<Map> response = restTemplate.postForEntity("https://www.linkedin.com/oauth/v2/accessToken", request, Map.class);
-        String accessToken = (String) response.getBody().get("access_token");
-
-        session.setAttribute("accessToken", accessToken);
-
-        return "redirect:/form";
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(tokenUrl, request, String.class);
+        return response;
     }
 
+    @PostMapping("/share-on-linkedin")
+    public ResponseEntity<String> shareOnLinkedIn(@RequestBody String content, @RequestBody String accessToken) {
+        String shareUrl = "https://api.linkedin.com/v2/shares";
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> request = new HttpEntity<>(content, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(shareUrl, request, String.class);
+
+        return response;
+    }
     @PostMapping("/submit")
     public ResponseEntity<String> submit(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Map<String, String> formData) {
         try {
